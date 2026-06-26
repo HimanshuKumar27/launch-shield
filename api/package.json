@@ -1,0 +1,16 @@
+{
+  "name": "launchshield-api",
+  "version": "1.0.0",
+  "description": "LaunchShield Vercel Serverless API",
+  "private": true,
+  "engines": {
+    "node": "20"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.0.0",
+    "@google/generative-ai": "^0.15.0",
+    "axios": "^1.7.0",
+    "node-fetch": "^3.3.2",
+    "cheerio": "^1.0.0-rc.12"
+  }
+}

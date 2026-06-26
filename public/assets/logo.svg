@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <rect width="32" height="32" rx="8" fill="#0d9488"/>
+  <path d="M16 4L6 9v7c0 6.563 4.313 12.063 10 13.563C21.688 28.063 26 22.563 26 16V9L16 4z" fill="white"/>
+  <path d="M16 4L6 9v7c0 6.563 4.313 12.063 10 13.563C21.688 28.063 26 22.563 26 16V9L16 4z" fill="url(#shield-gradient)" opacity="0.3"/>
+  <defs>
+    <linearGradient id="shield-gradient" x1="16" y1="4" x2="16" y2="28" gradientUnits="userSpaceOnUse">
+      <stop stop-color="white"/>
+      <stop offset="1" stop-color="transparent"/>
+    </linearGradient>
+  </defs>
+</svg>

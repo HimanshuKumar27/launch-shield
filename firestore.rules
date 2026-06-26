@@ -1,0 +1,33 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Users ────────────────────────────────────────────────────────────
+    // Read/write only by the authenticated owner
+    match /users/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // ── Scans ────────────────────────────────────────────────────────────
+    // MVP: Cloud Function (Admin SDK) is the sole writer.
+    // Client can only read/delete their own scans.
+    match /scans/{scanId} {
+      // Read: only the owner
+      allow read: if request.auth != null && resource.data.uid == request.auth.uid;
+
+      // Create: allowed from client if user is authenticated and setting their own uid
+      allow create: if request.auth != null && request.resource.data.uid == request.auth.uid;
+
+      // Update: not allowed
+      allow update: if false;
+
+      // Delete: only by the owner
+      allow delete: if request.auth != null && resource.data.uid == request.auth.uid;
+    }
+
+    // Block all other access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="darkreader-lock" content="true" />
+  <title>Audit Report — LaunchShield</title>
+  <meta name="description" content="Full website audit report including performance, SEO, accessibility, security, and best practices scores with AI-powered recommendations." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body class="bg-dark-950 text-gray-100 font-sans">
+
+  <!-- ── Navigation ──────────────────────────────── -->
+  <nav class="sticky top-0 z-40 border-b border-white/[0.06]" style="background:rgba(3,7,18,0.88);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-2.5 group" aria-label="Back to LaunchShield home">
+        <div class="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center glow-teal-sm transition-all duration-300 group-hover:scale-110">
+          <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2L3 7v6c0 5.25 3.75 10.15 9 11.25C17.25 23.15 21 18.25 21 13V7l-9-5z"/></svg>
+        </div>
+        <span class="font-bold text-lg tracking-tight text-white hidden sm:block">Launch<span class="text-gradient">Shield</span></span>
+      </a>
+      <div class="flex items-center gap-2" id="nav-actions">
+        <button id="nav-scan-another" onclick="window.location.href='scan.html'" class="btn-ghost text-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+          New Scan
+        </button>
+        <button id="nav-export-pdf" class="btn-secondary text-sm py-2 px-3">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          Export PDF
+        </button>
+
+      </div>
+    </div>
+  </nav>
+
+  <!-- ── Report Content ──────────────────────────── -->
+  <main id="report-content" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- ── Site Preview Card ─────────────────────── -->
+    <div class="card-glass-premium p-6 mb-6" id="site-preview-card">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center gap-5">
+        <!-- Screenshot -->
+        <div class="relative w-full sm:w-48 h-32 rounded-xl bg-dark-800 border border-dark-700 overflow-hidden flex-shrink-0">
+          <img id="site-screenshot" src="" alt="" class="w-full h-full object-cover object-top hidden" />
+          <div id="screenshot-placeholder" class="absolute inset-0 flex flex-col items-center justify-center gap-2">
+            <svg class="w-8 h-8 text-dark-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            <span class="text-xs text-dark-600">Screenshot</span>
+          </div>
+          <!-- Scan line animation overlay -->
+          <div class="scan-line absolute inset-x-0 h-0.5 bg-gradient-to-r from-transparent via-primary-400 to-transparent pointer-events-none opacity-60"></div>
+        </div>
+        <!-- Site info -->
+        <div class="flex-1 min-w-0">
+          <div class="flex flex-wrap items-center gap-2 mb-2">
+            <img id="site-favicon" src="" alt="" class="w-4 h-4 rounded hidden" />
+            <h1 id="site-title" class="text-xl font-bold text-white truncate">Loading…</h1>
+            <span id="site-status-badge" class="items-center gap-1 text-xs px-2 py-0.5 rounded-full font-semibold border hidden">
+              <span class="w-1.5 h-1.5 rounded-full" id="status-dot"></span>
+              <span id="status-text">200 OK</span>
+            </span>
+          </div>
+          <p id="site-description" class="text-gray-400 text-sm leading-relaxed mb-3 line-clamp-2"></p>
+          <div class="flex flex-wrap items-center gap-3 text-xs text-gray-600">
+            <div class="flex items-center gap-1">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg>
+              <span id="site-url-display" class="truncate max-w-[200px]"></span>
+            </div>
+            <div class="flex items-center gap-1">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <span id="scan-time-display"></span>
+            </div>
+          </div>
+        </div>
+        <!-- Overall Score -->
+        <div class="flex-shrink-0 text-center">
+          <div class="relative w-24 h-24 mx-auto">
+            <svg class="w-24 h-24 -rotate-90" viewBox="0 0 96 96" aria-hidden="true">
+              <circle cx="48" cy="48" r="38" fill="none" stroke="#1f2937" stroke-width="8"/>
+              <circle cx="48" cy="48" r="38" fill="none" id="overall-ring"
+                stroke="#10b981" stroke-width="8"
+                stroke-dasharray="238.76" stroke-dashoffset="40.6"
+                stroke-linecap="round" class="transition-all duration-1000"/>
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <span id="overall-score-num" class="text-3xl font-black text-gradient">—</span>
+            </div>
+          </div>
+          <div class="text-xs text-gray-500 uppercase tracking-wider mt-2">Health Score</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Sub-scores Row ─────────────────────────── -->
+    <div class="grid grid-cols-2 sm:grid-cols-5 gap-4 mb-6" id="subscores-row">
+      <!-- Rendered by JS -->
+    </div>
+
+    <!-- ── AI Recommendations ─────────────────────── -->
+    <div class="card border-primary-500/30 bg-gradient-to-br from-primary-500/5 to-dark-900 p-6 mb-6" id="ai-panel">
+      <div class="flex items-center gap-3 mb-5">
+        <div class="w-8 h-8 rounded-lg bg-primary-500/20 border border-primary-500/30 flex items-center justify-center flex-shrink-0">
+          <svg class="w-4 h-4 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+        </div>
+        <div>
+          <h2 class="text-base font-bold text-white">AI Recommendations</h2>
+          <p class="text-xs text-gray-500">Prioritized plain-language fixes, powered by Gemini</p>
+        </div>
+        <span class="ml-auto text-xs px-2 py-0.5 rounded-full bg-primary-500/20 text-primary-400 border border-primary-500/30 font-semibold">Gemini 2.0</span>
+      </div>
+      <div id="recommendations-list" class="space-y-3">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- ── Audit Tabs ─────────────────────────────── -->
+    <div class="card" id="audit-tabs-card">
+      <!-- Tab buttons (horizontal scroll on mobile) -->
+      <div class="border-b border-dark-800 px-4 pt-4 overflow-x-auto scrollbar-hide">
+        <div class="flex items-center gap-1 min-w-max pb-3" role="tablist" aria-label="Audit categories">
+          <button class="tab-btn tab-btn-active" role="tab" aria-selected="true" aria-controls="tab-performance" id="btn-performance" data-tab="performance">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            Performance
+            <span id="perf-score-badge" class="score-badge score-badge-good w-6 h-6 text-xs">84</span>
+          </button>
+          <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-accessibility" id="btn-accessibility" data-tab="accessibility">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            Accessibility
+            <span id="a11y-score-badge" class="score-badge score-badge-warning w-6 h-6 text-xs">70</span>
+          </button>
+          <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-seo" id="btn-seo" data-tab="seo">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            SEO
+            <span id="seo-score-badge" class="score-badge score-badge-good w-6 h-6 text-xs">91</span>
+          </button>
+          <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-security" id="btn-security" data-tab="security">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2L3 7v6c0 5.25 3.75 10.15 9 11.25C17.25 23.15 21 18.25 21 13V7l-9-5z"/></svg>
+            Security
+            <span id="sec-score-badge" class="score-badge score-badge-warning w-6 h-6 text-xs">62</span>
+          </button>
+          <button class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-ux" id="btn-ux" data-tab="ux">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Best Practices
+            <span id="ux-score-badge" class="score-badge score-badge-good w-6 h-6 text-xs">95</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tab panels -->
+      <div class="p-6">
+        <!-- Performance tab -->
+        <div id="tab-performance" role="tabpanel" aria-labelledby="btn-performance">
+          <!-- Core Web Vitals -->
+          <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-6">
+            <div class="card p-4 text-center border-dark-700" id="cwv-fcp">
+              <div class="text-2xl font-black text-emerald-400 mb-1" id="cwv-fcp-val">—</div>
+              <div class="text-xs text-gray-500 font-medium">FCP</div>
+              <div class="text-[10px] text-gray-700 mt-0.5">First Contentful Paint</div>
+            </div>
+            <div class="card p-4 text-center border-dark-700" id="cwv-lcp">
+              <div class="text-2xl font-black text-amber-400 mb-1" id="cwv-lcp-val">—</div>
+              <div class="text-xs text-gray-500 font-medium">LCP</div>
+              <div class="text-[10px] text-gray-700 mt-0.5">Largest Contentful Paint</div>
+            </div>
+            <div class="card p-4 text-center border-dark-700" id="cwv-si">
+              <div class="text-2xl font-black text-emerald-400 mb-1" id="cwv-si-val">—</div>
+              <div class="text-xs text-gray-500 font-medium">SI</div>
+              <div class="text-[10px] text-gray-700 mt-0.5">Speed Index</div>
+            </div>
+            <div class="card p-4 text-center border-dark-700" id="cwv-tbt">
+              <div class="text-2xl font-black text-amber-400 mb-1" id="cwv-tbt-val">—</div>
+              <div class="text-xs text-gray-500 font-medium">TBT</div>
+              <div class="text-[10px] text-gray-700 mt-0.5">Total Blocking Time</div>
+            </div>
+            <div class="card p-4 text-center border-dark-700 col-span-2 sm:col-span-1" id="cwv-cls">
+              <div class="text-2xl font-black text-emerald-400 mb-1" id="cwv-cls-val">—</div>
+              <div class="text-xs text-gray-500 font-medium">CLS</div>
+              <div class="text-[10px] text-gray-700 mt-0.5">Cumulative Layout Shift</div>
+            </div>
+          </div>
+          <!-- Audit items -->
+          <div id="perf-audits" class="space-y-2"></div>
+        </div>
+
+        <!-- Accessibility tab -->
+        <div id="tab-accessibility" role="tabpanel" aria-labelledby="btn-accessibility" class="hidden">
+          <div id="a11y-audits" class="space-y-2"></div>
+        </div>
+
+        <!-- SEO tab -->
+        <div id="tab-seo" role="tabpanel" aria-labelledby="btn-seo" class="hidden">
+          <!-- SEO meta overview -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6" id="seo-meta-grid"></div>
+          <div id="seo-audits" class="space-y-2"></div>
+        </div>
+
+        <!-- Security tab -->
+        <div id="tab-security" role="tabpanel" aria-labelledby="btn-security" class="hidden">
+          <!-- Security overview chips -->
+          <div class="flex flex-wrap gap-3 mb-6" id="security-overview"></div>
+          <!-- Security header checks -->
+          <div id="security-headers" class="space-y-2"></div>
+        </div>
+
+        <!-- Best Practices tab -->
+        <div id="tab-ux" role="tabpanel" aria-labelledby="btn-ux" class="hidden">
+          <div id="ux-audits" class="space-y-2"></div>
+        </div>
+      </div>
+    </div>
+
+
+  </main>
+
+  <!-- ── Scripts ─────────────────────────────────── -->
+  <script src="js/charts.js"></script>
+  <script src="js/pdf.js"></script>
+  <script src="js/report.js"></script>
+
+  <script type="module">
+    let currentScan = null;
+
+    // PDF export button
+    document.getElementById('nav-export-pdf')?.addEventListener('click', () => {
+      if (window.exportReportPDF) window.exportReportPDF();
+    });
+
+    // ── Boot / Load scan ───────────────────────────
+    function boot() {
+      // Load only from sessionStorage (since accounts are removed and report saving is disabled)
+      const raw = sessionStorage.getItem('launchshield_scan');
+      if (raw) {
+        try {
+          currentScan = JSON.parse(raw);
+          window.renderReport(currentScan);
+          return;
+        } catch (err) {
+          console.error('Failed to parse scan from sessionStorage:', err);
+        }
+      }
+
+      // No data — redirect to scan page
+      window.location.href = 'scan.html';
+    }
+
+    // Run boot
+    boot();
+  </script>
+</body>
+</html>
+
