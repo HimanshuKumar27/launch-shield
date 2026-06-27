@@ -50,14 +50,14 @@ exports.capture = async function(url) {
     }
   }
 
-  // ── Fallback 1: Microlink Embed API (free, fast, keyless) ──────────────────
+  // ── Fallback 1: thum.io screenshot (free, fast, aggressively cached) ──────────────────
   try {
-    const encoded = encodeURIComponent(url);
-    // Microlink's embed endpoint returns a 302 redirect directly to the screenshot image
-    const screenshotUrl = `https://api.microlink.io/?url=${encoded}&screenshot=true&embed=screenshot.url`;
+    const screenshotUrl = `https://image.thum.io/get/width/1280/crop/800/${url}`;
+    // Warm up the thum.io cache by triggering a request in the background
+    axios.head(screenshotUrl, { timeout: 6000 }).catch(() => {});
     return { screenshotUrl };
   } catch (err) {
-    console.warn('Microlink screenshot fallback failed:', err.message);
+    console.warn('Thum.io screenshot fallback failed:', err.message);
   }
 
   // ── Fallback 2: Google PageSpeed screenshot thumbnail ───────────────────────

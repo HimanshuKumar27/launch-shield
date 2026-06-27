@@ -398,6 +398,10 @@
     });
 
     async function startScan(url) {
+      // Trigger screenshot preloading in the background immediately
+      const screenshotPreloader = new Image();
+      screenshotPreloader.src = `https://image.thum.io/get/width/1280/crop/800/${url}`;
+
       const progressBar = document.getElementById('scanning-progress-bar');
       const statusText = document.getElementById('scanning-status-text');
       const progressPercent = document.getElementById('scanning-progress-percent');
