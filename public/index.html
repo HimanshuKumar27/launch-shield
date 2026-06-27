@@ -89,7 +89,7 @@
       </p>
 
       <!-- URL Input (glass upgrade) -->
-      <div class="max-w-2xl mx-auto mb-6 animate-slide-up">
+      <div class="max-w-2xl mx-auto mb-6 animate-slide-up" id="hero-input-container">
         <form id="hero-scan-form" novalidate class="relative flex flex-col sm:flex-row gap-3 p-2 rounded-2xl card-glass-premium border-white/[0.1] focus-within:border-primary-500/50 focus-within:shadow-glow transition-all duration-300" style="background:rgba(17,24,39,0.8)">
           <div class="flex items-center gap-3 flex-1 px-3">
             <svg class="w-5 h-5 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -99,18 +99,57 @@
               type="url"
               id="hero-url-input"
               placeholder="https://yourwebsite.com"
-              class="flex-1 bg-transparent py-2.5 text-gray-100 placeholder-gray-500 text-base focus:outline-none"
+              class="flex-1 bg-transparent py-2text-gray-100 placeholder-gray-500 text-sm sm:text-base focus:outline-none"
               autocomplete="url"
               aria-label="Website URL to scan"
             />
           </div>
-          <button type="submit" id="hero-scan-btn" class="btn-primary rounded-xl px-6 py-3 flex-shrink-0 text-base">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-            Scan Now — Free
+          <button type="submit" id="hero-scan-btn" class="flex items-center gap-2 px-6 py-2 rounded-xl bg-white/[0.05] border border-white/[0.1] hover:bg-white/[0.1] hover:border-white/[0.2] transition-all text-sm font-medium text-white flex-shrink-0">
+            Scan &rarr;
           </button>
         </form>
         <p id="hero-url-error" class="text-red-400 text-sm mt-2 hidden">Please enter a valid URL (e.g. https://example.com)</p>
         <p class="text-gray-600 text-sm mt-3">No account required · 25 scans / 10 min · Results in &lt;30 seconds</p>
+      </div>
+
+      <!-- Scanning State UI (Hidden by default) -->
+      <style>
+        @keyframes scan-sweep {
+          0% { transform: translateY(-100%); }
+          100% { transform: translateY(100%); }
+        }
+      </style>
+      <div id="hero-scanning-ui" class="hidden max-w-lg mx-auto w-full animate-fade-in card-glass-premium p-8 rounded-3xl border-white/[0.05]">
+        <div class="relative w-32 h-32 mx-auto mb-6 flex items-center justify-center">
+          <!-- Unique Orbital Scanner Animation -->
+          <div class="absolute inset-0 rounded-full border-2 border-primary-500/10"></div>
+          <div class="absolute inset-0 rounded-full border-t-2 border-primary-400 animate-spin" style="animation-duration: 1.5s;"></div>
+          <div class="absolute inset-2 rounded-full border-b-2 border-emerald-400 animate-spin" style="animation-duration: 2.5s; animation-direction: reverse;"></div>
+          <!-- Center Core -->
+          <div class="w-16 h-16 rounded-full bg-primary-500/10 border border-primary-500/30 flex items-center justify-center glow-teal relative overflow-hidden">
+            <svg class="w-8 h-8 text-primary-400 relative z-10" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L3 7v6c0 5.25 3.75 10.15 9 11.25C17.25 23.15 21 18.25 21 13V7l-9-5z"/></svg>
+            <!-- Data stream overlay -->
+            <div class="absolute inset-0 bg-gradient-to-t from-transparent via-emerald-400/40 to-transparent animate-[scan-sweep_1.5s_ease-in-out_infinite]"></div>
+          </div>
+        </div>
+
+        <h2 class="text-xl sm:text-2xl font-bold mb-1">Scanning <span id="scanning-url-display" class="text-gradient font-black truncate max-w-[200px] inline-block align-bottom"></span></h2>
+        <p class="text-gray-400 text-sm mb-6" id="scanning-status-text">Fetching page metadata...</p>
+        
+        <!-- Progress Bar -->
+        <div class="h-1.5 rounded-full bg-dark-800 overflow-hidden w-full mx-auto">
+          <div id="scanning-progress-bar" class="h-full bg-primary-500 rounded-full transition-all duration-300" style="width: 5%; box-shadow: 0 0 10px rgba(20,184,166,0.6)"></div>
+        </div>
+      </div>
+      
+      <!-- Scan Error UI (Hidden by default) -->
+      <div id="hero-error-ui" class="hidden max-w-lg mx-auto w-full animate-fade-in card-glass-premium p-8 rounded-3xl border-red-500/20 bg-red-500/5">
+        <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-red-500/10 border border-red-500/30 flex items-center justify-center">
+          <svg class="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+        </div>
+        <h2 class="text-xl font-bold text-white mb-2">Scan Failed</h2>
+        <p id="hero-error-message" class="text-gray-400 text-sm mb-6">We couldn't reach that website.</p>
+        <button id="hero-retry-btn" class="btn-secondary text-sm px-6 py-2">Try Again</button>
       </div>
 
       <!-- Trust badges -->
@@ -382,7 +421,7 @@
 
         <div class="p-6 flex items-center justify-between">
           <p class="text-sm text-gray-500">Scan your website to see your full report →</p>
-          <a href="scan.html" class="btn-primary text-sm py-2 px-4">Try Free Scan</a>
+          <a href="#hero-scan-form" class="btn-primary text-sm py-2 px-4">Try Free Scan</a>
         </div>
       </div>
     </div>
@@ -403,7 +442,7 @@
       </h2>
       <p class="text-gray-400 text-lg mb-10">Join developers, agencies, and founders who use LaunchShield before every launch.</p>
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-        <a href="scan.html" class="btn-primary text-base px-8 py-4">
+        <a href="#hero-scan-form" class="btn-primary text-base px-8 py-4">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
           Start Free Scan
         </a>
@@ -436,8 +475,15 @@
       return url;
     }
 
-    // Hero form: redirect to scan page with URL param
-    document.getElementById('hero-scan-form').addEventListener('submit', function(e) {
+    const STEPS = [
+      { label: 'Fetching page metadata…', pct: 10, duration: 1000 },
+      { label: 'Running Core Audits…', pct: 35, duration: 8000 },
+      { label: 'Testing defensive security…', pct: 60, duration: 3000 },
+      { label: 'Generating AI recommendations…', pct: 85, duration: 5000 },
+      { label: 'Finalizing report…', pct: 95, duration: 1500 }
+    ];
+
+    document.getElementById('hero-scan-form').addEventListener('submit', async function(e) {
       e.preventDefault();
       const rawInput = document.getElementById('hero-url-input').value.trim();
       const errEl = document.getElementById('hero-url-error');
@@ -453,12 +499,83 @@
         const parsed = new URL(url);
         if (!parsed.hostname || !parsed.hostname.includes('.')) throw new Error('invalid host');
         errEl.classList.add('hidden');
-        window.location.href = 'scan.html?url=' + encodeURIComponent(url);
+        
+        // Hide input container and show scanning UI
+        document.getElementById('hero-input-container').classList.add('hidden');
+        document.getElementById('hero-error-ui').classList.add('hidden');
+        document.getElementById('hero-scanning-ui').classList.remove('hidden');
+        document.getElementById('scanning-url-display').textContent = parsed.hostname;
+        
+        startScan(url);
       } catch {
         errEl.textContent = 'Please enter a valid URL.';
         errEl.classList.remove('hidden');
       }
     });
+    
+    document.getElementById('hero-retry-btn').addEventListener('click', () => {
+      document.getElementById('hero-error-ui').classList.add('hidden');
+      document.getElementById('hero-input-container').classList.remove('hidden');
+    });
+
+    async function startScan(url) {
+      const progressBar = document.getElementById('scanning-progress-bar');
+      const statusText = document.getElementById('scanning-status-text');
+      
+      let stepIndex = 0;
+      let progressTimer;
+
+      function runNextStep() {
+        if (stepIndex >= STEPS.length) return;
+        const step = STEPS[stepIndex];
+        progressBar.style.width = step.pct + '%';
+        statusText.textContent = step.label;
+        stepIndex++;
+
+        if (stepIndex < STEPS.length) {
+          progressTimer = setTimeout(runNextStep, step.duration);
+        }
+      }
+
+      runNextStep();
+
+      try {
+        const response = await fetch('/api/runScan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url }),
+        });
+
+        if (!response.ok) {
+          const errData = await response.json().catch(() => ({}));
+          throw new Error(errData.error || `Server error (${response.status}). Please try again.`);
+        }
+
+        const scanResult = await response.json();
+
+        clearTimeout(progressTimer);
+        progressBar.style.width = '100%';
+        statusText.textContent = 'Scan complete!';
+
+        sessionStorage.setItem('launchshield_scan', JSON.stringify(scanResult));
+
+        setTimeout(() => {
+          window.location.href = 'report.html';
+        }, 800);
+
+      } catch (err) {
+        console.error('Scan failed:', err);
+        clearTimeout(progressTimer);
+        
+        document.getElementById('hero-scanning-ui').classList.add('hidden');
+        const errUI = document.getElementById('hero-error-ui');
+        errUI.classList.remove('hidden');
+        const errMsg = document.getElementById('hero-error-message');
+        if (errMsg) {
+          errMsg.textContent = err.message || 'We encountered an error while scanning the website.';
+        }
+      }
+    }
   </script>
 
 

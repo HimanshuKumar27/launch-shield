@@ -28,14 +28,11 @@
         <span class="font-bold text-lg tracking-tight text-white hidden sm:block">Launch<span class="text-gradient">Shield</span></span>
       </a>
       <div class="flex items-center gap-2" id="nav-actions">
-        <button id="nav-scan-another" onclick="window.location.href='scan.html'" class="btn-ghost text-sm">
+        <button id="nav-scan-another" onclick="window.location.href='index.html'" class="btn-ghost text-sm">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
           New Scan
         </button>
-        <button id="nav-export-pdf" class="btn-secondary text-sm py-2 px-3">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-          Export PDF
-        </button>
+
 
       </div>
     </div>
@@ -221,16 +218,10 @@
 
   <!-- ── Scripts ─────────────────────────────────── -->
   <script src="js/charts.js"></script>
-  <script src="js/pdf.js"></script>
   <script src="js/report.js"></script>
 
   <script type="module">
     let currentScan = null;
-
-    // PDF export button
-    document.getElementById('nav-export-pdf')?.addEventListener('click', () => {
-      if (window.exportReportPDF) window.exportReportPDF();
-    });
 
     // ── Boot / Load scan ───────────────────────────
     function boot() {
@@ -246,8 +237,8 @@
         }
       }
 
-      // No data — redirect to scan page
-      window.location.href = 'scan.html';
+      // No data — redirect to home page
+      window.location.href = 'index.html';
     }
 
     // Run boot
