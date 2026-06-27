@@ -74,21 +74,28 @@ function renderReport(scan) {
   }
 
   // Screenshot
-  if (siteMeta.screenshotUrl) {
-    const img = document.getElementById('site-screenshot');
-    img.onerror = () => {
-      console.warn('Screenshot URL failed to load, trying thum.io fallback...');
-      img.onerror = () => {
-        img.classList.add('hidden');
-        document.getElementById('screenshot-placeholder').classList.remove('hidden');
-      };
-      img.src = `https://image.thum.io/get/width/640/crop/800/${scan.url}`;
-    };
-    img.src = siteMeta.screenshotUrl;
-    img.alt = 'Screenshot of ' + scan.url;
+  const img = document.getElementById('site-screenshot');
+  img.classList.add('animate-fade-in'); // Add smooth fade-in
+  
+  // Use fast thum.io as default unless we have a premium ScreenshotOne API URL
+  let finalScreenshotUrl = siteMeta.screenshotUrl;
+  if (!finalScreenshotUrl || finalScreenshotUrl.includes('api.microlink.io')) {
+    finalScreenshotUrl = `https://image.thum.io/get/width/1280/crop/800/${scan.url}`;
+  }
+
+  img.onerror = () => {
+    console.warn('Screenshot URL failed to load.');
+    img.classList.add('hidden');
+    document.getElementById('screenshot-placeholder').classList.remove('hidden');
+  };
+  
+  img.onload = () => {
     img.classList.remove('hidden');
     document.getElementById('screenshot-placeholder').classList.add('hidden');
-  }
+  };
+  
+  img.src = finalScreenshotUrl;
+  img.alt = 'Screenshot of ' + scan.url;
 
   // Status badge
   if (siteMeta.statusCode) {

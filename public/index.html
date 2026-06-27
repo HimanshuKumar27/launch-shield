@@ -113,45 +113,7 @@
         <p class="text-gray-600 text-sm mt-3">No account required · 25 scans / 10 min · Results in &lt;30 seconds</p>
       </div>
 
-      <!-- Scanning State UI (Hidden by default) -->
-      <style>
-        @keyframes scan-sweep {
-          0% { transform: translateY(-100%); }
-          100% { transform: translateY(100%); }
-        }
-      </style>
-      <div id="hero-scanning-ui" class="hidden max-w-lg mx-auto w-full animate-fade-in card-glass-premium p-8 rounded-3xl border-white/[0.05]">
-        <div class="relative w-32 h-32 mx-auto mb-6 flex items-center justify-center">
-          <!-- Unique Orbital Scanner Animation -->
-          <div class="absolute inset-0 rounded-full border-2 border-primary-500/10"></div>
-          <div class="absolute inset-0 rounded-full border-t-2 border-primary-400 animate-spin" style="animation-duration: 1.5s;"></div>
-          <div class="absolute inset-2 rounded-full border-b-2 border-emerald-400 animate-spin" style="animation-duration: 2.5s; animation-direction: reverse;"></div>
-          <!-- Center Core -->
-          <div class="w-16 h-16 rounded-full bg-primary-500/10 border border-primary-500/30 flex items-center justify-center glow-teal relative overflow-hidden">
-            <svg class="w-8 h-8 text-primary-400 relative z-10" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L3 7v6c0 5.25 3.75 10.15 9 11.25C17.25 23.15 21 18.25 21 13V7l-9-5z"/></svg>
-            <!-- Data stream overlay -->
-            <div class="absolute inset-0 bg-gradient-to-t from-transparent via-emerald-400/40 to-transparent animate-[scan-sweep_1.5s_ease-in-out_infinite]"></div>
-          </div>
-        </div>
 
-        <h2 class="text-xl sm:text-2xl font-bold mb-1">Scanning <span id="scanning-url-display" class="text-gradient font-black truncate max-w-[200px] inline-block align-bottom"></span></h2>
-        <p class="text-gray-400 text-sm mb-6" id="scanning-status-text">Fetching page metadata...</p>
-        
-        <!-- Progress Bar -->
-        <div class="h-1.5 rounded-full bg-dark-800 overflow-hidden w-full mx-auto">
-          <div id="scanning-progress-bar" class="h-full bg-primary-500 rounded-full transition-all duration-300" style="width: 5%; box-shadow: 0 0 10px rgba(20,184,166,0.6)"></div>
-        </div>
-      </div>
-      
-      <!-- Scan Error UI (Hidden by default) -->
-      <div id="hero-error-ui" class="hidden max-w-lg mx-auto w-full animate-fade-in card-glass-premium p-8 rounded-3xl border-red-500/20 bg-red-500/5">
-        <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-red-500/10 border border-red-500/30 flex items-center justify-center">
-          <svg class="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-        </div>
-        <h2 class="text-xl font-bold text-white mb-2">Scan Failed</h2>
-        <p id="hero-error-message" class="text-gray-400 text-sm mb-6">We couldn't reach that website.</p>
-        <button id="hero-retry-btn" class="btn-secondary text-sm px-6 py-2">Try Again</button>
-      </div>
 
       <!-- Trust badges -->
       <div class="flex flex-wrap items-center justify-center gap-6 text-gray-600 text-sm animate-fade-in">
@@ -168,6 +130,54 @@
           Shareable PDF Reports
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ── Full Page Scanning Section (Hidden by default) ── -->
+  <section id="scan-section" class="hidden relative min-h-screen flex flex-col items-center justify-center py-20 bg-dark-950 z-50">
+    <div class="absolute inset-0 bg-mesh-gradient pointer-events-none opacity-50" aria-hidden="true"></div>
+    <div class="relative z-10 w-full max-w-2xl px-4 text-center">
+      
+      <!-- Scanning State UI -->
+      <style>
+        @keyframes scan-sweep {
+          0% { transform: translateY(-100%); }
+          100% { transform: translateY(100%); }
+        }
+      </style>
+      <div id="hero-scanning-ui" class="w-full animate-fade-in card-glass-premium p-12 rounded-[2rem] border-white/[0.05] shadow-2xl">
+        <div class="relative w-40 h-40 mx-auto mb-8 flex items-center justify-center">
+          <!-- Unique Orbital Scanner Animation -->
+          <div class="absolute inset-0 rounded-full border-2 border-primary-500/10"></div>
+          <div class="absolute inset-0 rounded-full border-t-2 border-primary-400 animate-spin" style="animation-duration: 1.5s;"></div>
+          <div class="absolute inset-2 rounded-full border-b-2 border-emerald-400 animate-spin" style="animation-duration: 2.5s; animation-direction: reverse;"></div>
+          <!-- Center Core -->
+          <div class="w-20 h-20 rounded-full bg-primary-500/10 border border-primary-500/30 flex items-center justify-center glow-teal relative overflow-hidden">
+            <svg class="w-10 h-10 text-primary-400 relative z-10" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L3 7v6c0 5.25 3.75 10.15 9 11.25C17.25 23.15 21 18.25 21 13V7l-9-5z"/></svg>
+            <!-- Data stream overlay -->
+            <div class="absolute inset-0 bg-gradient-to-t from-transparent via-emerald-400/40 to-transparent animate-[scan-sweep_1.5s_ease-in-out_infinite]"></div>
+          </div>
+        </div>
+
+        <h2 class="text-3xl sm:text-4xl font-bold mb-3">Scanning <span id="scanning-url-display" class="text-gradient font-black truncate max-w-[300px] inline-block align-bottom"></span></h2>
+        <p class="text-gray-400 text-base mb-10" id="scanning-status-text">Fetching page metadata...</p>
+        
+        <!-- Progress Bar -->
+        <div class="h-2 rounded-full bg-dark-800 overflow-hidden w-full mx-auto">
+          <div id="scanning-progress-bar" class="h-full bg-primary-500 rounded-full transition-all duration-300" style="width: 5%; box-shadow: 0 0 12px rgba(20,184,166,0.7)"></div>
+        </div>
+      </div>
+      
+      <!-- Scan Error UI (Hidden by default) -->
+      <div id="hero-error-ui" class="hidden w-full animate-fade-in card-glass-premium p-12 rounded-[2rem] border-red-500/20 bg-red-500/5 shadow-2xl">
+        <div class="w-20 h-20 mx-auto mb-6 rounded-2xl bg-red-500/10 border border-red-500/30 flex items-center justify-center">
+          <svg class="w-10 h-10 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+        </div>
+        <h2 class="text-3xl font-bold text-white mb-3">Scan Failed</h2>
+        <p id="hero-error-message" class="text-gray-400 text-base mb-8">We couldn't reach that website.</p>
+        <button id="hero-retry-btn" class="btn-secondary text-base px-8 py-3">Try Again</button>
+      </div>
+
     </div>
   </section>
 
@@ -501,11 +511,14 @@
         if (!parsed.hostname || !parsed.hostname.includes('.')) throw new Error('invalid host');
         errEl.classList.add('hidden');
         
-        // Hide input container and show scanning UI
-        document.getElementById('hero-input-container').classList.add('hidden');
+        // Show the full-page scanning section and smoothly scroll to it
+        const scanSection = document.getElementById('scan-section');
+        scanSection.classList.remove('hidden');
         document.getElementById('hero-error-ui').classList.add('hidden');
         document.getElementById('hero-scanning-ui').classList.remove('hidden');
         document.getElementById('scanning-url-display').textContent = parsed.hostname;
+        
+        scanSection.scrollIntoView({ behavior: 'smooth' });
         
         startScan(url);
       } catch {
@@ -516,7 +529,9 @@
     
     document.getElementById('hero-retry-btn').addEventListener('click', () => {
       document.getElementById('hero-error-ui').classList.add('hidden');
-      document.getElementById('hero-input-container').classList.remove('hidden');
+      document.getElementById('scan-section').classList.add('hidden');
+      // Scroll back up to hero form
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
     async function startScan(url) {
