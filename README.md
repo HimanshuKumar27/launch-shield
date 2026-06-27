@@ -18,25 +18,7 @@ All of this works with **zero accounts or sign-ups required**.
 *   **No Accounts Needed**: Fully stateless on the frontend, storing report results in `sessionStorage` with no database footprint on the client side.
 *   **Premium Visuals**: Features custom HSL-tailored dark modes, interactive 3D particle canvas overlays, score halos, animations, and PDF export.
 
----
 
-## 🏗️ Architecture
-
-```mermaid
-graph TD
-    Client[Client Browser / public] -->|HTTP POST /api/runScan| VercelFn[Vercel Serverless Functions]
-    VercelFn -->|DNS Resolution & SSRF Check| Target[Target Website]
-    VercelFn -->|Audits Query| PageSpeedAPI[Google PageSpeed Insights API]
-    VercelFn -->|Analyze & Prioritize| Gemini[Gemini 2.0 API]
-    VercelFn <-->|Read/Write Timestamps| Firestore[(Firestore DB: _rateLimit)]
-    Client -->|Loads transient report| Session[Browser sessionStorage]
-```
-
-*   **Frontend**: Static HTML5, CSS3 (Tailwind compiled), and vanilla JavaScript. No heavy JS frameworks required. Served by Vercel's global CDN.
-*   **Backend**: Utilizes a shared `src/` core built on Clean Architecture principles. Supports dual deployments: Vercel Serverless Functions (Node.js 20) in the `api/` directory, and Firebase Cloud Functions in `functions/`.
-*   **Rate Limiter**: Firestore collection `_rateLimit` tracking transaction-wrapped IP base64 key arrays with a 24-hour TTL expiration. Accessed via `firebase-admin` SDK using service account credentials stored as a Vercel environment variable (or auto-discovered in Cloud Functions).
-
----
 
 ## 🚀 Deploying to Vercel (Free Tier)
 
