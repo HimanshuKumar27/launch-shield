@@ -4,27 +4,33 @@
  * Tracks timestamp history in Firestore _rateLimit collection.
  */
 
-const { getFirestore } = require('firebase-admin/firestore');
+const { getDb } = require('./firebase');
 
 const LIMIT_WINDOW_MS = 10 * 60 * 1000; // 10 minutes
 const LIMIT_MAX_SCANS = 25;
 
 /**
  * Check and increment rate limit for the given request IP.
- * @param {string|null} uid - Ignored (accounts removed)
- * @param {Object} context - Firebase Functions call context (for IP)
+ * @param {string|null} ip - Client IP address (passed from adapter)
  * @returns {{ allowed: boolean, used: number, limit: number, remaining: number }}
  */
-exports.check = async function(uid, context) {
+exports.check = async function(ip) {
   // Bypass rate limiting in local emulator to facilitate testing
   if (process.env.FUNCTIONS_EMULATOR === 'true') {
     return { allowed: true, used: 0, limit: LIMIT_MAX_SCANS, remaining: LIMIT_MAX_SCANS };
   }
 
-  const ip = context?.rawRequest?.ip || 'unknown';
-  const ipKey = Buffer.from(ip).toString('base64').replace(/[^a-zA-Z0-9]/g, '_');
+  let db;
+  try {
+    db = getDb();
+  } catch (err) {
+    console.warn('Rate limit Firestore unavailable:', err.message, '— allowing request.');
+    return { allowed: true, used: 0, limit: LIMIT_MAX_SCANS, remaining: LIMIT_MAX_SCANS };
+  }
+
+  const safeIp = ip || 'unknown';
+  const ipKey = Buffer.from(safeIp).toString('base64').replace(/[^a-zA-Z0-9]/g, '_');
   
-  const db = getFirestore();
   const rateLimitRef = db.collection('_rateLimit').doc(ipKey);
 
   const result = await db.runTransaction(async (transaction) => {
@@ -55,7 +61,7 @@ exports.check = async function(uid, context) {
     // Save with a 24-hour expiration for Firestore TTL cleanup
     transaction.set(rateLimitRef, {
       timestamps: activeTimestamps,
-      ip,
+      ip: safeIp,
       expiresAt: new Date(now + 24 * 60 * 60 * 1000),
     });
 
