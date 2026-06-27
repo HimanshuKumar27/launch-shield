@@ -33,8 +33,8 @@ graph TD
 ```
 
 *   **Frontend**: Static HTML5, CSS3 (Tailwind compiled), and vanilla JavaScript. No heavy JS frameworks required. Served by Vercel's global CDN.
-*   **Backend**: Vercel Serverless Functions (Node.js 20) in the `api/` directory, orchestrating parallel calls to PageSpeed and Gemini APIs.
-*   **Rate Limiter**: Firestore collection `_rateLimit` tracking transaction-wrapped IP base64 key arrays with a 24-hour TTL expiration. Accessed via `firebase-admin` SDK using service account credentials stored as a Vercel environment variable.
+*   **Backend**: Utilizes a shared `src/` core built on Clean Architecture principles. Supports dual deployments: Vercel Serverless Functions (Node.js 20) in the `api/` directory, and Firebase Cloud Functions in `functions/`.
+*   **Rate Limiter**: Firestore collection `_rateLimit` tracking transaction-wrapped IP base64 key arrays with a 24-hour TTL expiration. Accessed via `firebase-admin` SDK using service account credentials stored as a Vercel environment variable (or auto-discovered in Cloud Functions).
 
 ---
 
@@ -113,14 +113,12 @@ This starts a local server at `http://localhost:3000` that serves `public/` as s
 ```
 LaunchShield/
 ├── api/                     ← Vercel Serverless Functions
-│   ├── runScan.js           ← Main scan orchestrator (POST /api/runScan)
-│   ├── package.json         ← API dependencies
-│   └── lib/                 ← Shared modules
-│       ├── pagespeed.js     ← PageSpeed Insights API wrapper
-│       ├── htmlParser.js    ← HTML fetch & metadata extraction
-│       ├── screenshot.js    ← Screenshot capture (keyless fallback chain)
-│       ├── gemini.js        ← Gemini AI recommendations
-│       └── rateLimit.js     ← IP-based rate limiter (Firestore)
+│   ├── runScan.js           ← Vercel HTTP adapter for runScanUseCase
+│   └── package.json         ← API dependencies
+├── functions/               ← Firebase Cloud Functions
+│   ├── runScan.js           ← Firebase adapter for runScanUseCase
+│   ├── index.js             ← Firebase Functions entry point
+│   └── package.json         ← Functions dependencies
 ├── public/                  ← Static frontend (served as CDN root)
 │   ├── index.html           ← Landing page
 │   ├── scan.html            ← Scanning progress page
@@ -128,7 +126,10 @@ LaunchShield/
 │   ├── css/                 ← Compiled Tailwind CSS
 │   ├── js/                  ← Frontend JS modules
 │   └── assets/              ← Logos, icons, images
-├── functions/               ← Legacy Firebase Cloud Functions (not deployed)
+├── src/                     ← Core Application (Clean Architecture)
+│   ├── domain/              ← Business rules (validators, scoring)
+│   ├── application/         ← Use cases (runScanUseCase)
+│   └── infrastructure/      ← External services (pagespeed, gemini, firebase)
 ├── .env.example             ← Template for environment variables
 ├── .gitignore               ← Protects secrets and node_modules
 └── vercel.json              ← Vercel build & routing configuration
